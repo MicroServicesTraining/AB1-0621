@@ -3,15 +3,20 @@
  */
 package com.ofs.sms.teachers.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ofs.sms.teachers.model.Teacher;
+import com.ofs.sms.teachers.service.TeacherService;
 
 /**
  * @author USER
@@ -21,15 +26,9 @@ import com.ofs.sms.teachers.model.Teacher;
 @RestController
 @RequestMapping("/api/v1/teacher")
 public class TeacherController {
-	
-	private List<Teacher> teachersList;
 
-	/**
-	 * @param teachersList
-	 */
-	public TeacherController() {
-		initializeTeachersList();
-	}
+	@Autowired
+	private TeacherService teacherService;
 
 	//@RequestMapping(path = "/welcome", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
 	@GetMapping("/welcome")
@@ -37,48 +36,30 @@ public class TeacherController {
 		return "<h1>Welcome To School Management System</h1>";
 	}
 	
-	@GetMapping("/all")
+	@GetMapping
 	public List<Teacher> listAllTeachers(){
-		//initializeTeachersList();
-		return teachersList;
+		return teacherService.listAllTeachers();
+	}
+	
+	@PostMapping
+	public Teacher createTeacher(@RequestBody Teacher teacher) {
+		return teacherService.createTeacher(teacher);
+	}
+	
+	@PutMapping
+	public Teacher modifyTeacher(@RequestBody Teacher teacher) {
+		return teacherService.modifyTeacher(teacher);
+	}
+	
+	@DeleteMapping
+	public Teacher removeTeacher(@RequestParam Long teacherId) {
+		return teacherService.removeTeacher(teacherId);
 	}
 	
 	@GetMapping("/byid")
 	public Teacher getTeacherById(@RequestParam Long teacherId) {
-		//initializeTeachersList();
-		Teacher teacher = findTeacherById(teachersList, teacherId);
+		Teacher teacher = teacherService.getTeacherById(teacherId);
 		return teacher;
-	}
-
-	private Teacher findTeacherById(List<Teacher> teachersList, Long teacherId) {
-		for(Teacher teacher : teachersList) {
-			if(teacher.getTeacherId().equals(teacherId)) {
-				return teacher;
-			}
-		}
-		return null;
-	}
-
-	private void initializeTeachersList() {
-		teachersList = new ArrayList<Teacher>();
-		Teacher t1 = new Teacher();
-		t1.setTeacherId(1001L);
-		t1.setName("Kiran");
-		t1.setSubject("Java");
-		t1.setSalary(15000.00);
-		teachersList.add(t1);
-		Teacher t2 = new Teacher();
-		t2.setTeacherId(1002L);
-		t2.setName("Krishna");
-		t2.setSubject("Oracle");
-		t2.setSalary(12000.00);
-		teachersList.add(t2);
-		Teacher t3 = new Teacher();
-		t3.setTeacherId(1003L);
-		t3.setName("Kalyan");
-		t3.setSubject("C++");
-		t3.setSalary(10000.00);
-		teachersList.add(t3);
 	}
 
 }
