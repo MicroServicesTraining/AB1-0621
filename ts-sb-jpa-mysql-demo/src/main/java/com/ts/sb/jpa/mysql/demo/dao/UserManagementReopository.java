@@ -20,7 +20,7 @@ import com.ts.sb.jpa.mysql.demo.model.User;
  *
  */
 @Repository
-@NamedQuery(name = "loadUsersNameContains", query = "select u from User u where u.firstName like  %:fname% or u.lastName like %:lastname%" )
+//@NamedQuery(name = "User.loadUsersNameContains", query = "select u from User u where u.firstName like  %:fname% or u.lastName like %:lastname%" )
 public interface UserManagementReopository extends JpaRepository<User, Long> {
 
 	Optional<User> findByUserName(String userName);
@@ -33,8 +33,8 @@ public interface UserManagementReopository extends JpaRepository<User, Long> {
 	 * ) List<User> loadUsersNameContains(String fname, String lname);
 	 */
 
-	//@Query("select u from User u where u.firstName like  %:fname% or u.lastName like %:lastname%")
-	@Query(name = "loadUsersNameContains")
+	@Query("select u from User u where u.firstName like  %:fname% or u.lastName like %:lastname%")
+	//@Query(name = "loadUsersNameContains")
 	List<User> loadUsersNameContains(String fname, @Param(value = "lastname") String lname);
 
 }
