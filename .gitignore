@@ -23,6 +23,7 @@
 *.classpath
 
 */mvn/*
+*/.mvn/*
 */.settings/*
 /maven-wrapper.jar
 /maven-wrapper.properties
