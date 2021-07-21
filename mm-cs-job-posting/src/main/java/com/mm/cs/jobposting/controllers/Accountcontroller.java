@@ -25,7 +25,7 @@ public class Accountcontroller {
 	public List<Account> getAccounts() {
 		List<Account> responseEntity = 
 				   (List<Account>) new RestTemplate().getForObject(
-		        "http://localhost:8081/jobposting/accounts", List.class);
+		        "http://localhost:8084/as/accounts", List.class);
 		return responseEntity;
 	}
 	

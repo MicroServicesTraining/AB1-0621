@@ -4,6 +4,8 @@
 package com.mm.cs.jobseeker.controllers;
 
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -26,8 +28,7 @@ import com.mm.cs.jobseeker.responses.JobPostingResponse;
 @RequestMapping("jobs")
 public class JobSeekerController {
 	
-	@Value("${sb.greeting.message}")
-	private String msg;
+	private static final Logger LOGGER = Logger.getLogger("JobSeekerController");
 	
 	@Value("${js.service.title}")
 	private String title;
@@ -37,14 +38,16 @@ public class JobSeekerController {
 	
 	@GetMapping("messages")
 	public String configMessages() {
-		return "<h1>"+this.title+"</h1>"+"<h1>" + this.msg + "</h1>"
+		return "<h1>"+this.title+"<h1>"
 				+ "<h2> we have morethan "+this.count+" jobseekers are here </h2>";
 	}
 
 	@GetMapping
 	public List<JobPosting> findAllJobPostings(){
+		LOGGER.log(Level.INFO, "findAllJobPosting");
 		RestTemplate restTemplate = new RestTemplate();
 		List<JobPosting> response = restTemplate.getForObject("http://localhost:8082/mmcsjp/jobpostings", List.class);
+		//List<JobPosting> response = restTemplate.getForObject("http://localhost:8090/jobpostings", List.class);
 		return response;
 	}
 	
@@ -53,6 +56,7 @@ public class JobSeekerController {
 		RestTemplate restTemplate = new RestTemplate();
 		JobPostingResponse jobPostingResponse = new JobPostingResponse();
 		ResponseEntity<JobPosting> response = restTemplate.getForEntity("http://localhost:8082/mmcsjp/jobpostings/"+id, JobPosting.class);
+		//ResponseEntity<JobPosting> response = restTemplate.getForEntity("http://localhost:8090/jobpostings/"+id, JobPosting.class);
 		response.status(HttpStatus.OK);
 		if(response.hasBody()) {
 			jobPostingResponse.setStatus(HttpStatus.OK.value());
@@ -90,20 +94,6 @@ public class JobSeekerController {
 	 */
 	public void setCount(Long count) {
 		this.count = count;
-	}
-
-	/**
-	 * @return the msg
-	 */
-	public String getMsg() {
-		return msg;
-	}
-
-	/**
-	 * @param msg the msg to set
-	 */
-	public void setMsg(String msg) {
-		this.msg = msg;
 	}
 	
 }
