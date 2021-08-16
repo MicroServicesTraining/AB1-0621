@@ -50,7 +50,7 @@ public class ProductsAspect {
 	public void aroundLog(ProceedingJoinPoint pj) {
 		LOGGER.info("ProductService Method Around log - before");
 		try {
-			pj.proceed();
+			pj.proceed(); // this statement invokes actual business method
 		} catch (Throwable e) {
 			LOGGER.info(e.getMessage());
 		}
